@@ -13,17 +13,20 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public class FirstTest {
 
+    public static final String BASE_URL = "http://localhost:8899/public_html/admin/";
+
     WebDriver driver;
     WebDriverWait wait;
 
     @Before
     public void setUp() {
         driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, 30);
     }
 
     @Test
     public void testAdminLogin() {
-        driver.get("http://localhost:8899/public_html/admin/");
+        driver.get(BASE_URL);
 
         WebElement userName = driver.findElement(By.name("username"));
         userName.sendKeys("admin");
@@ -33,9 +36,8 @@ public class FirstTest {
 
         WebElement login = driver.findElement(By.name("login"));
         login.click();
-        wait.until(driver.getTitle() == "My Store");
 
-        Assert.assertEquals("My Store", driver.getCurrentUrl());
+        Assert.assertEquals("My Store", driver.getTitle());
     }
 
     @After
