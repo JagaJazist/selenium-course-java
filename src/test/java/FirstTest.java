@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
+
 /**
  * Created by apostnov on 26/05/2017.
  */
@@ -37,7 +39,9 @@ public class FirstTest {
         WebElement login = driver.findElement(By.name("login"));
         login.click();
 
-        Assert.assertEquals("My Store", driver.getTitle());
+        wait.until(titleIs("My Store"));
+
+        Assert.assertEquals("Wrong title","My Store", driver.getTitle());
     }
 
     @After
