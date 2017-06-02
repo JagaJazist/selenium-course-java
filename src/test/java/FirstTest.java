@@ -2,11 +2,11 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
@@ -22,6 +22,7 @@ public class FirstTest {
 
     @Before
     public void setUp() {
+
         driver = new ChromeDriver();
         wait = new WebDriverWait(driver, 30);
     }
@@ -42,6 +43,19 @@ public class FirstTest {
         wait.until(titleIs("My Store"));
 
         Assert.assertEquals("Wrong title","My Store", driver.getTitle());
+
+        for (int i = 1; i < 18; i++) {
+            WebElement element = driver.findElement(By.cssSelector("ul#box-apps-menu li:nth-of-type(" + i + ") a"));
+            System.out.println(element.getText());
+            element.click();
+        }
+
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @After
