@@ -1,13 +1,18 @@
+import apple.laf.JRSUIConstants;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.refreshed;
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 /**
@@ -24,11 +29,35 @@ public class FirstTest {
     public void setUp() {
 
         driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         wait = new WebDriverWait(driver, 30);
     }
 
     @Test
     public void testAdminLogin() {
+        login();
+
+        int primaryLinksNum = driver.findElements(By.cssSelector("ul#box-apps-menu li")).size();
+        System.out.println("Primary: " + primaryLinksNum);
+
+        for (int i = 1; i <= primaryLinksNum; i++) {
+            WebElement primaryLink = driver.findElement(By.cssSelector("#box-apps-menu li:nth-of-type(" + i + ")"));
+            System.out.println(primaryLink.getText());
+            primaryLink.click();
+
+            int secondaryLinks = driver.findElements(By.cssSelector("#box-apps-menu li:nth-of-type(" + i + ")")).size();
+
+            for (int j = 2; j < secondaryLinks; j++) {
+                WebElement secondaryLink = driver.findElement(By.cssSelector("#box-apps-menu li:nth-of-type(" + i + ") li:nth-of-type(" + j + ")"));
+                System.out.println("Secondary: " + secondaryLink.getText());
+                secondaryLink.click();
+            }
+            driver.get(BASE_URL);
+        }
+    }
+
+    private void login() {
         driver.get(BASE_URL);
 
         WebElement userName = driver.findElement(By.name("username"));
@@ -43,19 +72,6 @@ public class FirstTest {
         wait.until(titleIs("My Store"));
 
         Assert.assertEquals("Wrong title","My Store", driver.getTitle());
-
-        for (int i = 1; i < 18; i++) {
-            WebElement element = driver.findElement(By.cssSelector("ul#box-apps-menu li:nth-of-type(" + i + ") a"));
-            System.out.println(element.getText());
-            element.click();
-        }
-
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @After
