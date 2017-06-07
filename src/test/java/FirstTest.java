@@ -3,36 +3,65 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 
 public class FirstTest extends TestBase {
 
-    public static final String BASE_URL = "http://localhost:8899/public_html/admin/";
+    public static final String BASE_URL = "http://localhost:8899/public_html/admin/?app=countries&doc=countries";
 
     @Test
-    public void testMenuLinks() {
+    public void testCountriesSorting() {
         login();
 
-        int primaryLinksNumber = driver.findElements(By.cssSelector("ul#box-apps-menu li")).size();
+        List<WebElement> nameElements = driver.findElements(By.cssSelector(".dataTable tr td:nth-of-type(5)"));
+        List<WebElement> zonesElements = driver.findElements(By.cssSelector(".dataTable tr td:nth-of-type(6)"));
+        if (nameElements.size() != zonesElements.size()) {
+            throw new IllegalStateException("Wrong amount of names or zones");
+        }
+        List<Country> countries = new ArrayList<>();
+        List<Country> countryToCheck = new ArrayList<>();
+        List<String> sortedNames = new ArrayList<>();
 
-        for (int i = 1; i <= primaryLinksNumber; i++) {
-            WebElement primaryLink = driver.findElement(By.cssSelector("#box-apps-menu li:nth-of-type(" + i + ") a"));
-            primaryLink.click();
+        for (int i = 0; i < nameElements.size(); i++) {
+            Country country = new Country(nameElements.get(i).getText(), zonesElements.get(i).getText());
+            countries.add(country);
+            sortedNames.add(country.name);
+            if (!country.zones.equals("0")) {
+                System.out.println("Compared: " + country.zones);
+                countryToCheck.add(country);
+            }
+        }
+        Collections.sort(sortedNames);
 
-            if (isElementPresent(By.cssSelector(".docs"))) {
-                int secondaryLinksNumber = driver.findElements(By.cssSelector("#box-apps-menu li:nth-of-type(" + i + ") a ")).size();
-                for (int j = 2; j < secondaryLinksNumber; j++) {
-                    WebElement secondaryLink = driver.findElement(By.cssSelector("#box-apps-menu li:nth-of-type(" + i + ") li:nth-of-type(" + j + ") a"));
-                    wait.until(ExpectedConditions.visibilityOf(secondaryLink));
-                    secondaryLink.click();
-                    wait.until(ExpectedConditions.attributeToBe(By.cssSelector("#box-apps-menu li:nth-of-type(" + i + ") li:nth-of-type(" + j + ")"), "class", "selected"));
-                }
+        for (int i = 0; i < countries.size(); i++) {
+            Assert.assertEquals(sortedNames.get(i), countries.get(i).name);
+        }
+
+        for (Country country: countryToCheck) {
+            driver.findElement(By.linkText(country.name)).click();
+            wait.until(ExpectedConditions.titleIs("Edit Country | My Store"));
+            List<WebElement> regions = driver.findElements(By.cssSelector(".dataTable tr td:nth-of-type(3)"));
+            List<String> regionNames = new ArrayList<>();
+            List<String> sortedRegionNames = new ArrayList<>();
+            for (WebElement region : regions) {
+                regionNames.add(region.getText());
+                sortedRegionNames.add(region.getText());
+            }
+            Collections.sort(sortedNames);
+
+            for (int i = 0; i < regionNames.size(); i++) {
+                Assert.assertEquals("Regions in " + country.name + "are not sorted",regionNames.get(i), sortedRegionNames.get(i));
+                System.out.println("Opened " + country.name);
             }
 
-            Assert.assertTrue(isElementPresent(By.cssSelector("h1")));
             driver.get(BASE_URL);
         }
+
     }
 
     private void login() {
@@ -46,9 +75,16 @@ public class FirstTest extends TestBase {
 
         WebElement login = driver.findElement(By.name("login"));
         login.click();
+    }
 
-        wait.until(titleIs("My Store"));
+    private class Country {
 
-        Assert.assertEquals("Wrong title", "My Store", driver.getTitle());
+        public Country(String name, String zones){
+            this.name = name;
+            this.zones = zones;
+        }
+
+        String name;
+        String zones;
     }
 }

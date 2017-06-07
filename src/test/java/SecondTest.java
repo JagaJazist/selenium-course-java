@@ -8,17 +8,26 @@ import java.util.List;
 
 public class SecondTest extends TestBase {
 
-    public static final String BASE_URL = "http://localhost:8899/public_html/en/acme-corp-m-1/";
+    public static final String BASE_URL = "http://localhost:8899/public_html/en/";
 
     @Test
     public void testOnlyOneStickerIsShown() {
         driver.get(BASE_URL);
 
-        List<WebElement> products = driver.findElements(By.cssSelector(".products li"));
-        for (WebElement product : products) {
-            int stickersNum = product.findElements(By.cssSelector(".sticker")).size();
-            Assert.assertEquals(1, stickersNum);
-        }
+        driver.findElement(By.cssSelector("#box-campaigns img")).click();
+
+        String name = driver.findElement(By.cssSelector("#box-campaigns .name")).getText();
+        String regularPrice = driver.findElement(By.cssSelector("#box-campaigns .regular-price")).getText();
+        String campaignPrice = driver.findElement(By.cssSelector("#box-campaigns .campaign-price")).getText();
+
+        String color = driver.findElement(By.cssSelector("#box-campaigns .campaign-price")).getCssValue("color");
+
+        String regularPriceTagName = driver.findElement(By.cssSelector("#box-campaigns .regular-price")).getTagName();
+
+        String campaignPriceTagName = driver.findElement(By.cssSelector("#box-campaigns .campaign-price")).getTagName();
+
+        System.out.println(campaignPriceTagName);
+
     }
 
 }
