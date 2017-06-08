@@ -1,68 +1,51 @@
-import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 
 public class FirstTest extends TestBase {
 
-    public static final String BASE_URL = "http://localhost:8899/public_html/admin/?app=countries&doc=countries";
+    public static final String BASE_URL = "http://localhost:8899/public_html/en/";
 
     @Test
-    public void testCountriesSorting() {
-        login();
+    public void testRegistration() {
+        driver.get(BASE_URL);
+        driver.findElement(By.cssSelector("[name=login_form] a")).click();
+        wait.until(titleIs("Create Account | My Store"));
 
-        List<WebElement> nameElements = driver.findElements(By.cssSelector(".dataTable tr td:nth-of-type(5)"));
-        List<WebElement> zonesElements = driver.findElements(By.cssSelector(".dataTable tr td:nth-of-type(6)"));
-        if (nameElements.size() != zonesElements.size()) {
-            throw new IllegalStateException("Wrong amount of names or zones");
-        }
-        List<Country> countries = new ArrayList<>();
-        List<Country> countryToCheck = new ArrayList<>();
-        List<String> sortedNames = new ArrayList<>();
+        driver.findElement(By.cssSelector("[name=firstname]")).sendKeys("Name");
+        driver.findElement(By.cssSelector("[name=lastname]")).sendKeys("Lastname");
+        driver.findElement(By.cssSelector("[name=address1]")).sendKeys("123 Building");
+        driver.findElement(By.cssSelector("[name=postcode]")).sendKeys("35010");
+        Select select = new Select(driver.findElement(By.cssSelector("[name=country_code]")));
+        select.selectByVisibleText("United States");
+        driver.findElement(By.cssSelector("[name=city]")).sendKeys("Alexander City");
+        String email = "email_" + System.currentTimeMillis() + "@email.com";
+        System.out.println(email);
+        driver.findElement(By.cssSelector("[name=email]")).sendKeys(email);
+        driver.findElement(By.cssSelector("[name=phone]")).sendKeys("+18033456789");
+        String password = "password";
+        driver.findElement(By.cssSelector("[name=password]")).sendKeys(password);
+        driver.findElement(By.cssSelector("[name=confirmed_password]")).sendKeys(password);
 
-        for (int i = 0; i < nameElements.size(); i++) {
-            Country country = new Country(nameElements.get(i).getText(), zonesElements.get(i).getText());
-            countries.add(country);
-            sortedNames.add(country.name);
-            if (!country.zones.equals("0")) {
-                countryToCheck.add(country);
-            }
-        }
-        Collections.sort(sortedNames);
+        driver.findElement(By.cssSelector("[name=create_account]")).click();
 
-        for (int i = 0; i < countries.size(); i++) {
-            Assert.assertEquals(sortedNames.get(i), countries.get(i).name);
-        }
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.linkText("Logout"))));
+        driver.findElement(By.linkText("Logout")).click();
 
-        for (Country country: countryToCheck) {
-            driver.findElement(By.linkText(country.name)).click();
-            wait.until(ExpectedConditions.titleIs("Edit Country | My Store"));
-            List<WebElement> regions = driver.findElements(By.cssSelector(".dataTable tr td:nth-of-type(3)"));
-            List<String> regionNames = new ArrayList<>();
-            List<String> sortedRegionNames = new ArrayList<>();
-            for (WebElement region : regions) {
-                regionNames.add(region.getText());
-                sortedRegionNames.add(region.getText());
-            }
-            Collections.sort(sortedNames);
+        driver.findElement(By.cssSelector("[name=email]")).sendKeys(email);
+        driver.findElement(By.cssSelector("[name=password]")).sendKeys(password);
+        driver.findElement(By.cssSelector("[name=login]")).click();
 
-            for (int i = 0; i < regionNames.size(); i++) {
-                Assert.assertEquals("Regions in " + country.name + "are not sorted",regionNames.get(i), sortedRegionNames.get(i));
-            }
-
-            driver.get(BASE_URL);
-        }
-
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.linkText("Logout"))));
+        driver.findElement(By.linkText("Logout")).click();
     }
 
-    private void login() {
+    private void loginToAdmin() {
         driver.get(BASE_URL);
 
         WebElement userName = driver.findElement(By.name("username"));
