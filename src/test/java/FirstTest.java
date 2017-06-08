@@ -44,28 +44,4 @@ public class FirstTest extends TestBase {
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.linkText("Logout"))));
         driver.findElement(By.linkText("Logout")).click();
     }
-
-    private void loginToAdmin() {
-        driver.get(BASE_URL);
-
-        WebElement userName = driver.findElement(By.name("username"));
-        userName.sendKeys("admin");
-
-        WebElement password = driver.findElement(By.name("password"));
-        password.sendKeys("admin");
-
-        WebElement login = driver.findElement(By.name("login"));
-        login.click();
-    }
-
-    private class Country {
-
-        public Country(String name, String zones){
-            this.name = name;
-            this.zones = zones;
-        }
-
-        String name;
-        String zones;
-    }
 }
