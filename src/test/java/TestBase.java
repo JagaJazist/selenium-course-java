@@ -9,9 +9,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by apostnov on 05/06/2017.
- */
 public class TestBase {
     WebDriver driver;
     WebDriverWait wait;
@@ -19,7 +16,7 @@ public class TestBase {
     @Before
     public void setUp() {
 
-        driver = new FirefoxDriver();
+        driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         wait = new WebDriverWait(driver, 1);
     }
