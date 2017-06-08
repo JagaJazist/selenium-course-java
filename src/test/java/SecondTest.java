@@ -96,37 +96,9 @@ public class SecondTest extends TestBase {
         Assert.assertTrue(resultOnProductPage);
     }
 
-
-
-    @Test
-    public void testOnlyOneStickerIsShown() {
-        driver.get(BASE_URL);
-
-//        driver.findElement(By.cssSelector("#box-campaigns img")).click();
-
-        String name = driver.findElement(By.cssSelector("#box-campaigns .name")).getText();
-        String regularPrice = driver.findElement(By.cssSelector("#box-campaigns .regular-price")).getText();
-        String campaignPrice = driver.findElement(By.cssSelector("#box-campaigns .campaign-price")).getText();
-
-        String campaignPriceColor = driver.findElement(By.cssSelector("#box-campaigns .campaign-price")).getCssValue("color");
-        String regularPriceColor = driver.findElement(By.cssSelector("#box-campaigns .regular-price")).getCssValue("color");
-
-        String regularPriceTagName = driver.findElement(By.cssSelector("#box-campaigns .regular-price")).getTagName();
-
-        String campaignPriceTagName = driver.findElement(By.cssSelector("#box-campaigns .campaign-price")).getTagName();
-
-        Dimension regularPriceSize = driver.findElement(By.cssSelector("#box-campaigns .regular-price")).getSize();
-        Dimension campaignPriceSize = driver.findElement(By.cssSelector("#box-campaigns .campaign-price")).getSize();
-
-
-
-
-    }
-
-
-    public static Color parseColor(String input)
-    {
-        Pattern c = Pattern.compile("rgb *\\( *([0-9]+), *([0-9]+), *([0-9]+) *\\)");
+    public static Color parseColor(String input) {
+        System.out.println(input);
+        Pattern c = Pattern.compile("rgba? *\\( *([0-9]+), *([0-9]+), *([0-9]+),? *([0-9]+)? *\\)");
         Matcher m = c.matcher(input);
 
         if (m.matches())
