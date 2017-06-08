@@ -32,7 +32,6 @@ public class FirstTest extends TestBase {
             countries.add(country);
             sortedNames.add(country.name);
             if (!country.zones.equals("0")) {
-                System.out.println("Compared: " + country.zones);
                 countryToCheck.add(country);
             }
         }
@@ -56,7 +55,6 @@ public class FirstTest extends TestBase {
 
             for (int i = 0; i < regionNames.size(); i++) {
                 Assert.assertEquals("Regions in " + country.name + "are not sorted",regionNames.get(i), sortedRegionNames.get(i));
-                System.out.println("Opened " + country.name);
             }
 
             driver.get(BASE_URL);
