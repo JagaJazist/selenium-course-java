@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +13,9 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 public class FirstTest extends TestBase {
 
-    public static final String BASE_URL = "http://localhost:8899/public_html/admin/?app=countries&doc=countries";
+    public static final String COUNTRIES_URL = "http://localhost:8899/public_html/admin/?app=countries&doc=countries";
+    public static final String ZONES_URL = "http://localhost:8899/public_html/admin/?app=geo_zones&doc=geo_zones";
+
 
     @Test
     public void testCountriesSorting() {
@@ -57,13 +60,35 @@ public class FirstTest extends TestBase {
                 Assert.assertEquals("Regions in " + country.name + "are not sorted",regionNames.get(i), sortedRegionNames.get(i));
             }
 
-            driver.get(BASE_URL);
+            driver.get(COUNTRIES_URL);
         }
+    }
 
+    @Test
+    public void testZonesSorted() {
+        login();
+        driver.get(ZONES_URL);
+
+        int countriesNum = driver.findElements(By.cssSelector("[name=geo_zones_form] tr")).size();
+        for (int i = 2; i <= countriesNum; i++) {
+            driver.findElement(By.cssSelector("[name=geo_zones_form] tr:nth-of-type(" + i + ") td:nth-of-type(3) a")).click();
+
+            int zonesNum = driver.findElements(By.cssSelector("#table-zones tr")).size();
+            System.out.println(zonesNum);
+            List<String> zones = new ArrayList<>();
+            List<String> sortedZones = new ArrayList<>();
+
+            for (int j = 2; j < zonesNum; j++) {
+                Select select = new Select(driver.findElement(By.cssSelector("#table-zones tr:nth-of-type(" + j + ") td:nth-of-type(3) select")));
+                zones.add(select.getFirstSelectedOption().getText());
+                System.out.println(j + " " +select.getFirstSelectedOption().getText());
+            }
+            driver.get(ZONES_URL);
+        }
     }
 
     private void login() {
-        driver.get(BASE_URL);
+        driver.get(COUNTRIES_URL);
 
         WebElement userName = driver.findElement(By.name("username"));
         userName.sendKeys("admin");
