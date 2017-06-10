@@ -16,9 +16,9 @@ public class TestBase {
     @Before
     public void setUp() {
 
-        driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        wait = new WebDriverWait(driver, 1);
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, 10);
     }
 
     boolean isElementPresent (By locator) {

@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
-
 
 public class FirstTest extends TestBase {
 
@@ -19,7 +17,7 @@ public class FirstTest extends TestBase {
 
     @Test
     public void testCountriesSorting() {
-        login();
+        loginToAdmin();
 
         List<WebElement> nameElements = driver.findElements(By.cssSelector(".dataTable tr td:nth-of-type(5)"));
         List<WebElement> zonesElements = driver.findElements(By.cssSelector(".dataTable tr td:nth-of-type(6)"));
@@ -66,11 +64,11 @@ public class FirstTest extends TestBase {
 
     @Test
     public void testZonesSorted() {
-        login();
+        loginToAdmin();
         driver.get(ZONES_URL);
 
         int countriesNum = driver.findElements(By.cssSelector("[name=geo_zones_form] tr")).size();
-        for (int i = 2; i <= countriesNum; i++) {
+        for (int i = 2; i < countriesNum; i++) {
             driver.findElement(By.cssSelector("[name=geo_zones_form] tr:nth-of-type(" + i + ") td:nth-of-type(3) a")).click();
 
             int zonesNum = driver.findElements(By.cssSelector("#table-zones tr")).size();
@@ -78,16 +76,32 @@ public class FirstTest extends TestBase {
             List<String> zones = new ArrayList<>();
             List<String> sortedZones = new ArrayList<>();
 
+            String currentCountry = driver.findElement(By.cssSelector("[name=name]")).getAttribute("value");
+
             for (int j = 2; j < zonesNum; j++) {
-                Select select = new Select(driver.findElement(By.cssSelector("#table-zones tr:nth-of-type(" + j + ") td:nth-of-type(3) select")));
-                zones.add(select.getFirstSelectedOption().getText());
-                System.out.println(j + " " +select.getFirstSelectedOption().getText());
+                Select select = getSelect(j, currentCountry);
+                String text = select.getFirstSelectedOption().getText();
+                zones.add(text);
+                sortedZones.add(text);
+//                System.out.println(j + " " +select.getFirstSelectedOption().getText());
+            }
+
+            Collections.sort(sortedZones);
+            for (int j = 0; j < zones.size(); j++) {
+                Assert.assertEquals(zones.get(j), sortedZones.get(j));
             }
             driver.get(ZONES_URL);
         }
     }
 
-    private void login() {
+    private Select getSelect(int j, String currentCountry) {
+        if (currentCountry.equals("European Union")) {
+            return new Select(driver.findElement(By.cssSelector("#table-zones tr:nth-of-type(" + j + ") td:nth-of-type(2) select")));
+        }
+        return new Select(driver.findElement(By.cssSelector("#table-zones tr:nth-of-type(" + j + ") td:nth-of-type(3) select")));
+    }
+
+    private void loginToAdmin() {
         driver.get(COUNTRIES_URL);
 
         WebElement userName = driver.findElement(By.name("username"));
