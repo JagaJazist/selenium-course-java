@@ -72,7 +72,6 @@ public class FirstTest extends TestBase {
             driver.findElement(By.cssSelector("[name=geo_zones_form] tr:nth-of-type(" + i + ") td:nth-of-type(3) a")).click();
 
             int zonesNum = driver.findElements(By.cssSelector("#table-zones tr")).size();
-            System.out.println(zonesNum);
             List<String> zones = new ArrayList<>();
             List<String> sortedZones = new ArrayList<>();
 
@@ -83,7 +82,7 @@ public class FirstTest extends TestBase {
                 String text = select.getFirstSelectedOption().getText();
                 zones.add(text);
                 sortedZones.add(text);
-//                System.out.println(j + " " +select.getFirstSelectedOption().getText());
+                System.out.println(j + " " +select.getFirstSelectedOption().getText());
             }
 
             Collections.sort(sortedZones);
