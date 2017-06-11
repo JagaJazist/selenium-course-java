@@ -12,6 +12,6 @@ public class AdminMainPage extends PageBase {
     }
 
     public void openCatalog() {
-        driver.findElement(By.cssSelector("#box-apps-menu li:nth-of-type(2)" ));
+        driver.findElement(By.cssSelector("#box-apps-menu li:nth-of-type(2)" )).click();
     }
 }
