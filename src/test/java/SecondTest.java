@@ -25,8 +25,20 @@ public class SecondTest extends TestBase {
                 "Donald",
                 "12345",
                 System.getProperty("user.dir") + "/resources/donald.jpg",
+                true,
                 "123",
-                "ACME Corp."
+                "ACME Corp.",
+                "My full name is Donald Fauntleroy Duck",
+                "duck donald keywords",
+                "DD short description",
+                "DONALD head title",
+                "meta_desc",
+                "11/06/2017",
+                "11/06/2018",
+                "1234",
+                "Euros",
+                "2222",
+                "3333"
                 );
 
         AddProductPage addProductPage = new AddProductPage(driver);
