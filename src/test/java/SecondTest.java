@@ -1,4 +1,5 @@
 import Models.Product;
+import Models.ProductBuilder;
 import Pages.AddProductPage;
 import Pages.AdminMainPage;
 import Pages.CatalogPage;
@@ -20,39 +21,25 @@ public class SecondTest extends TestBase {
         CatalogPage catalogPage = new CatalogPage(driver);
         catalogPage.openNewProductPage();
 
-        Product product = new Product(
-                true,
-                "Donald",
-                "12345",
-                System.getProperty("user.dir") + "/resources/donald.jpg",
-                true,
-                "123",
-                "ACME Corp.",
-                "My full name is Donald Fauntleroy Duck",
-                "duck donald keywords",
-                "DD short description",
-                "DONALD head title",
-                "meta_desc",
-                "11/06/2017",
-                "11/06/2018",
-                "1234",
-                "Euros",
-                "2222",
-                "3333"
-                );
+        Product product = new ProductBuilder()
+                .setIsEnabled(true).setName("Donald")
+                .setCode("12345")
+                .setImageLink(System.getProperty("user.dir") + "/resources/donald.jpg")
+                .setIsUnisex(true).setQuantity("123").setManufacturer("ACME Corp.")
+                .setDescription("My full name is Donald Fauntleroy Duck")
+                .setKeywords("duck donald keywords")
+                .setShortDescription("DD short description")
+                .setHeadTitle("DONALD head title")
+                .setMetaDescription("meta_desc")
+                .setDateValidFrom("11/06/2017")
+                .setDateValidTo("11/06/2018")
+                .setPurchasePrice("1234")
+                .setCurrency("Euros")
+                .setPriceEur("2222")
+                .setPriceUsd("3333")
+                .createProduct();
 
         AddProductPage addProductPage = new AddProductPage(driver);
         addProductPage.fillForm(product);
-
-
-
-
-
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
