@@ -5,12 +5,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
-public class AddProductPage extends PageBase {
-    public AddProductPage(WebDriver driver) {
+public class EditProductPage extends PageBase {
+    public EditProductPage(WebDriver driver) {
         super(driver);
     }
 
-    public void fillForm(Product product) {
+    public void addProduct(Product product) {
         fillIsEnabled(product.isEnabled);
         fillName(product.name);
         fillCode(product.code);
@@ -36,6 +36,10 @@ public class AddProductPage extends PageBase {
         fillPriceUsd(product.priceUsd);
 
         submit();
+    }
+
+    public boolean checkName(String name) {
+        return name.equals(driver.findElement(By.cssSelector("[name^=name]")).getAttribute("value"));
     }
 
     private void fillPriceUsd(String priceUsd) {
@@ -126,5 +130,7 @@ public class AddProductPage extends PageBase {
     private void openInformationTab() {
         driver.findElement(By.linkText("Information")).click();
     }
+
+
 
 }

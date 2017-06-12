@@ -1,9 +1,10 @@
 import Models.Product;
 import Models.ProductBuilder;
-import Pages.AddProductPage;
+import Pages.EditProductPage;
 import Pages.AdminMainPage;
 import Pages.CatalogPage;
 import Pages.LoginToAdminPage;
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -39,7 +40,9 @@ public class SecondTest extends TestBase {
                 .setPriceUsd("3333")
                 .createProduct();
 
-        AddProductPage addProductPage = new AddProductPage(driver);
-        addProductPage.fillForm(product);
+        EditProductPage editProductPage = new EditProductPage(driver);
+        editProductPage.addProduct(product);
+        catalogPage.openProduct(product);
+        Assert.assertTrue(editProductPage.checkName(product.name));
     }
 }
