@@ -3,7 +3,9 @@ package Pages;
 import Models.Product;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class EditProductPage extends PageBase {
     public EditProductPage(WebDriver driver) {
@@ -16,8 +18,6 @@ public class EditProductPage extends PageBase {
         fillCode(product.code);
         fillImageLink(product.imageLink);
         fillIsUnisex(product.isUnisex);
-        fillDateValidFrom(product.dateValidFrom);
-        fillDateValidTo(product.dateValidTo);
 
         openInformationTab();
 
@@ -80,14 +80,6 @@ public class EditProductPage extends PageBase {
         driver.findElement(By.cssSelector("[name=keywords]")).sendKeys(keywords);
     }
 
-    private void fillDateValidTo(String dateValidTo) {
-        driver.findElement(By.cssSelector("[name=date_valid_to]")).sendKeys(dateValidTo);
-    }
-
-    private void fillDateValidFrom(String dateValidFrom) {
-        driver.findElement(By.cssSelector("[name=date_valid_from]")).sendKeys(dateValidFrom);
-    }
-
     private void fillIsUnisex(boolean isUnisex) {
         if (isUnisex) {
             driver.findElements(By.cssSelector("[name^=product_groups]")).get(2).click();
@@ -99,7 +91,10 @@ public class EditProductPage extends PageBase {
     }
 
     private void submit() {
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[name=save]")));
         driver.findElement(By.cssSelector("[name=save]")).click();
+//        wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.cssSelector("[name=save]"))));
     }
 
     private void fillManufacturer(String manufacturer) {
@@ -120,6 +115,8 @@ public class EditProductPage extends PageBase {
     }
 
     private void fillIsEnabled(boolean isEnabled) {
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[name=status]:nth-of-type(1)")));
         if(isEnabled) {
             driver.findElement(By.cssSelector("[name=status]:nth-of-type(1)")).click();
         } else {

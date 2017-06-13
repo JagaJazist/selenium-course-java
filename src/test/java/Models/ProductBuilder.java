@@ -13,8 +13,6 @@ public class ProductBuilder {
     private String shortDescription;
     private String headTitle;
     private String metaDescription;
-    private String dateValidFrom;
-    private String dateValidTo;
     private String purchasePrice;
     private String currency;
     private String priceEur;
@@ -80,16 +78,6 @@ public class ProductBuilder {
         return this;
     }
 
-    public ProductBuilder setDateValidFrom(String dateValidFrom) {
-        this.dateValidFrom = dateValidFrom;
-        return this;
-    }
-
-    public ProductBuilder setDateValidTo(String dateValidTo) {
-        this.dateValidTo = dateValidTo;
-        return this;
-    }
-
     public ProductBuilder setPurchasePrice(String purchasePrice) {
         this.purchasePrice = purchasePrice;
         return this;
@@ -111,6 +99,6 @@ public class ProductBuilder {
     }
 
     public Product createProduct() {
-        return new Product(isEnabled, name, code, imageLink, isUnisex, quantity, manufacturer, description, keywords, shortDescription, headTitle, metaDescription, dateValidFrom, dateValidTo, purchasePrice, currency, priceEur, priceUsd);
+        return new Product(isEnabled, name, code, imageLink, isUnisex, quantity, manufacturer, description, keywords, shortDescription, headTitle, metaDescription, purchasePrice, currency, priceEur, priceUsd);
     }
 }

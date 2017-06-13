@@ -3,7 +3,7 @@ package Models;
 public class Product {
 
     public Product(boolean isEnabled, String name, String code, String imageLink, boolean isUnisex, String quantity, String manufacturer, String description,
-                   String keywords, String shortDescription, String headTitle, String metaDescription, String dateValidFrom, String dateValidTo,
+                   String keywords, String shortDescription, String headTitle, String metaDescription,
                    String purchasePrice, String currency, String priceEur, String priceUsd) {
         this.isEnabled = isEnabled;
         this.name = name;
@@ -17,8 +17,6 @@ public class Product {
         this.shortDescription = shortDescription;
         this.headTitle = headTitle;
         this.metaDescription = metaDescription;
-        this.dateValidFrom = dateValidFrom;
-        this.dateValidTo = dateValidTo;
         this.purchasePrice = purchasePrice;
         this.currency = currency;
         this.priceEur = priceEur;
@@ -38,8 +36,6 @@ public class Product {
     public String shortDescription;
     public String headTitle;
     public String metaDescription;
-    public String dateValidFrom;
-    public String dateValidTo;
     public String purchasePrice;
     public String currency;
     public String priceEur;
