@@ -12,36 +12,28 @@ public class FirstTest extends TestBase {
     public static final String BASE_URL = "http://localhost:8899/public_html/en/";
 
     @Test
-    public void testRegistration() {
-        driver.get(BASE_URL);
-        driver.findElement(By.cssSelector("[name=login_form] a")).click();
-        wait.until(titleIs("Create Account | My Store"));
+    public void testRegistration() throws InterruptedException {
+        for (int i = 1; i < 4; i++) {
+            driver.get(BASE_URL);
+            driver.findElement(By.cssSelector("#box-most-popular li:nth-of-type(" + i + ")")).click();
 
-        driver.findElement(By.cssSelector("[name=firstname]")).sendKeys("Name");
-        driver.findElement(By.cssSelector("[name=lastname]")).sendKeys("Lastname");
-        driver.findElement(By.cssSelector("[name=address1]")).sendKeys("123 Building");
-        driver.findElement(By.cssSelector("[name=postcode]")).sendKeys("35010");
-        Select select = new Select(driver.findElement(By.cssSelector("[name=country_code]")));
-        select.selectByVisibleText("United States");
-        driver.findElement(By.cssSelector("[name=city]")).sendKeys("Alexander City");
-        String email = "email_" + System.currentTimeMillis() + "@email.com";
-        System.out.println(email);
-        driver.findElement(By.cssSelector("[name=email]")).sendKeys(email);
-        driver.findElement(By.cssSelector("[name=phone]")).sendKeys("+18033456789");
-        String password = "password";
-        driver.findElement(By.cssSelector("[name=password]")).sendKeys(password);
-        driver.findElement(By.cssSelector("[name=confirmed_password]")).sendKeys(password);
+            if (driver.findElements(By.cssSelector("[name^=options]")).size() > 0) {
+                Select select = new Select(driver.findElement(By.cssSelector("[name^=options]")));
+                select.selectByIndex(1);
+            }
+            driver.findElement(By.cssSelector("[name=add_cart_product]")).click();
 
-        driver.findElement(By.cssSelector("[name=create_account]")).click();
+            wait.until(ExpectedConditions.textToBe(By.cssSelector("span.quantity"), String.valueOf(i)));
+        }
 
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.linkText("Logout"))));
-        driver.findElement(By.linkText("Logout")).click();
+        driver.findElement(By.linkText("Checkout »")).click();
 
-        driver.findElement(By.cssSelector("[name=email]")).sendKeys(email);
-        driver.findElement(By.cssSelector("[name=password]")).sendKeys(password);
-        driver.findElement(By.cssSelector("[name=login]")).click();
+        for (int i = 0; i < 3; i++) {
+            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[name=remove_cart_item]")));
+            driver.findElement(By.cssSelector("[name=remove_cart_item]")).click();
+            wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.cssSelector("table.dataTable.rounded-corners td.item"))));
+        }
 
-        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.linkText("Logout"))));
-        driver.findElement(By.linkText("Logout")).click();
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#checkout-cart-wrapper p em"))));
     }
 }
