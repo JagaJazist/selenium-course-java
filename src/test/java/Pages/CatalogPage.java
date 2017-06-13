@@ -19,7 +19,6 @@ public class CatalogPage extends PageBase {
 
     public void openProduct(Product product) {
         WebDriverWait wait = new WebDriverWait(driver,5);
-        System.out.println(product.name);
         wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.linkText(product.name))));
         driver.findElement(By.linkText(product.name)).click();
     }
