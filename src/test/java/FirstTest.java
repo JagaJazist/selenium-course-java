@@ -31,7 +31,7 @@ public class FirstTest extends TestBase {
             WebElement button = driver.findElement(By.cssSelector("[name=remove_cart_item]"));
             wait.until(ExpectedConditions.visibilityOf(button));
             button.click();
-            wait.until(ExpectedConditions.invisibilityOf(button));
+            wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.cssSelector("#checkout-summary-wrapper td.item"))));
         }
 
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#checkout-cart-wrapper p em"))));
