@@ -1,27 +1,31 @@
-import Pages.LoginToAdminPage;
-import org.junit.Assert;
+import Pages.MainPage;
 import org.junit.Test;
-import org.openqa.selenium.By;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 
 
 public class FirstTest extends TestBase {
 
-    public static final String BASE_URL = "http://localhost:8899/public_html/admin/?app=catalog&doc=catalog&category_id=1:";
-
     @Test
-    public void testBrowserLogs() {
-        LoginToAdminPage loginToAdminPage = new LoginToAdminPage(driver);
-        loginToAdminPage.open();
-        loginToAdminPage.loginAsAdmin();
+    public void testCart() {
 
-        driver.get(BASE_URL);
+        MainPage mainPage = new MainPage(driver);
+        mainPage.addProductToCart(3);
 
-        int productsNum = driver.findElements(By.xpath("//*[contains(@class, 'dataTable')]//img/following-sibling::a")).size();
+        driver.findElement(By.linkText("Checkout »")).click();
 
-        for (int i = 0; i < productsNum; i++) {
-            driver.findElements(By.xpath("//*[contains(@class, 'dataTable')]//img/following-sibling::a")).get(i).click();
-            Assert.assertTrue(driver.manage().logs().get("browser").getAll().isEmpty());
-            driver.get(BASE_URL);
+        for (int i = 0; i < 3; i++) {
+            if (i != 2) {
+                wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector(".shortcut"))));
+                driver.findElement(By.cssSelector(".shortcut")).click();
+            }
+            WebElement button = driver.findElement(By.cssSelector("[name=remove_cart_item]"));
+            wait.until(ExpectedConditions.visibilityOf(button));
+            button.click();
+            wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.cssSelector("#checkout-summary-wrapper td.item"))));
         }
+
+        wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.cssSelector("#checkout-cart-wrapper p em"))));
     }
 }

@@ -2,7 +2,7 @@ import Models.Product;
 import Models.ProductBuilder;
 import Pages.EditProductPage;
 import Pages.AdminMainPage;
-import Pages.CatalogPage;
+import Pages.AdminCatalogPage;
 import Pages.LoginToAdminPage;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,8 +19,8 @@ public class SecondTest extends TestBase {
         AdminMainPage adminMainPage = new AdminMainPage(driver);
         adminMainPage.openCatalog();
 
-        CatalogPage catalogPage = new CatalogPage(driver);
-        catalogPage.openNewProductPage();
+        AdminCatalogPage adminCatalogPage = new AdminCatalogPage(driver);
+        adminCatalogPage.openNewProductPage();
 
         Product product = new ProductBuilder()
                 .setIsEnabled(true)
@@ -42,7 +42,7 @@ public class SecondTest extends TestBase {
 
         EditProductPage editProductPage = new EditProductPage(driver);
         editProductPage.addProduct(product);
-        catalogPage.openProduct(product);
+        adminCatalogPage.openProduct(product);
         Assert.assertTrue(editProductPage.checkName(product.name));
     }
 }

@@ -6,8 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class CatalogPage extends PageBase {
-    public CatalogPage(WebDriver driver) {
+public class AdminCatalogPage extends PageBase {
+    public AdminCatalogPage(WebDriver driver) {
         super(driver);
     }
 
