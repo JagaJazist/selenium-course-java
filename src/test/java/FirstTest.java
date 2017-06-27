@@ -10,7 +10,6 @@ public class FirstTest extends TestBase {
     @Test
     public void testCart() {
         MainPage mainPage = new MainPage(driver);
-
         mainPage.addProductsToCart(numberOfProductstoAddAndDelete);
         mainPage.checkout();
 
