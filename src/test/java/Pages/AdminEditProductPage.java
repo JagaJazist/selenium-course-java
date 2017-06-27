@@ -7,8 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class EditProductPage extends PageBase {
-    public EditProductPage(WebDriver driver) {
+public class AdminEditProductPage extends PageBase {
+    public AdminEditProductPage(WebDriver driver) {
         super(driver);
     }
 
@@ -127,7 +127,4 @@ public class EditProductPage extends PageBase {
     private void openInformationTab() {
         driver.findElement(By.linkText("Information")).click();
     }
-
-
-
 }

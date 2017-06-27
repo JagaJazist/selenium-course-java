@@ -2,12 +2,15 @@ package Pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MainPage extends PageBase {
+
+    @FindBy(linkText = "Checkout »")
+    WebElement checkout;
 
     public static final String BASE_URL = "http://localhost:8899/public_html/en/";
 
@@ -19,21 +22,27 @@ public class MainPage extends PageBase {
         driver.get(BASE_URL);
     }
 
-    public void addProductToCart(int numberOfProducts) {
+    public void addProductsToCart(int numberOfProducts) {
         for (int i = 1; i <= numberOfProducts; i++) {
-            open();
-            driver.findElement(By.cssSelector("#box-most-popular li:nth-of-type(" + i + ")")).click();
-            if (driver.findElements(By.cssSelector("[name^=options]")).size() > 0) {
-                Select select = new Select(driver.findElement(By.cssSelector("[name^=options]")));
-                select.selectByIndex(1);
-            }
-            driver.findElement(By.cssSelector("[name=add_cart_product]")).click();
-            WebDriverWait wait = new WebDriverWait(driver, 5);
-            wait.until(ExpectedConditions.textToBe(By.cssSelector("span.quantity"), String.valueOf(i)));
+            this.open();
+            openPopularProduct(i);
+            ProductPage productPage = new ProductPage(driver);
+            productPage.selectSizeIfNeeded();
+            productPage.addToCart();
+            waitUntilProductIsInCart(i);
         }
     }
 
-    public void checkout(){
+    private void waitUntilProductIsInCart(int i) {
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+        wait.until(ExpectedConditions.textToBe(By.cssSelector("span.quantity"), String.valueOf(i)));
+    }
 
+    private void openPopularProduct(int position) {
+        driver.findElement(By.cssSelector("#box-most-popular li:nth-of-type(" + position + ")")).click();
+    }
+
+    public void checkout(){
+        checkout.click();
     }
 }

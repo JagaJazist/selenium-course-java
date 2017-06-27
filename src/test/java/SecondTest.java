@@ -1,6 +1,6 @@
 import Models.Product;
 import Models.ProductBuilder;
-import Pages.EditProductPage;
+import Pages.AdminEditProductPage;
 import Pages.AdminMainPage;
 import Pages.AdminCatalogPage;
 import Pages.LoginToAdminPage;
@@ -40,9 +40,9 @@ public class SecondTest extends TestBase {
                 .setPriceUsd("3333")
                 .createProduct();
 
-        EditProductPage editProductPage = new EditProductPage(driver);
-        editProductPage.addProduct(product);
+        AdminEditProductPage adminEditProductPage = new AdminEditProductPage(driver);
+        adminEditProductPage.addProduct(product);
         adminCatalogPage.openProduct(product);
-        Assert.assertTrue(editProductPage.checkName(product.name));
+        Assert.assertTrue(adminEditProductPage.checkName(product.name));
     }
 }
